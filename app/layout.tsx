@@ -1,3 +1,5 @@
+import './globals.css';
+
 export const metadata = {
   title: 'DadMCP',
   description: 'Provide better education at home with AI',
