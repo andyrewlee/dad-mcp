@@ -17,12 +17,12 @@ export function createServerResponseAdapter(
 ): Promise<Response> {
   let writeHeadResolver: (v: WriteheadArgs) => void;
   const writeHeadPromise = new Promise<WriteheadArgs>(
-    async (resolve, reject) => {
+    async (resolve) => {
       writeHeadResolver = resolve;
     }
   );
 
-  return new Promise(async (resolve, reject) => {
+  return new Promise(async (resolve) => {
     let controller: ReadableStreamController<Uint8Array> | undefined;
     let shouldClose = false;
     let wroteHead = false;
@@ -42,7 +42,7 @@ export function createServerResponseAdapter(
       return fakeServerResponse;
     };
 
-    let bufferedData: Uint8Array[] = [];
+    const bufferedData: Uint8Array[] = [];
 
     const write = (
       chunk: Buffer | string,
@@ -86,7 +86,7 @@ export function createServerResponseAdapter(
         }
         return fakeServerResponse;
       },
-      on: (event: string, listener: (...args: any[]) => void) => {
+      on: (event: string, listener: (...args: unknown[]) => void) => {
         eventEmitter.on(event, listener);
         return fakeServerResponse;
       },

@@ -1,5 +1,6 @@
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
+import Image from "next/image"
 
 export default function LandingPage() {
   return (
@@ -14,7 +15,7 @@ export default function LandingPage() {
             target="_blank"
             className="text-gray-600 hover:text-gray-900 transition-colors"
           >
-            <img src="/github.svg" alt="GitHub" className=" h-6 w-6 inline-block" />
+            <Image src="/github.svg" alt="GitHub" width={24} height={24} className="inline-block" />
             <span className="sr-only">GitHub</span>
           </Link>
         </div>
@@ -23,7 +24,7 @@ export default function LandingPage() {
         <div className="text-center mb-8">
           <h2 className="text-4xl font-bold text-gray-900 mb-4">Dad-Powered Learning</h2>
           <p className="text-lg text-gray-600 max-w-xl mx-auto">
-            Spark your kid's creativity with AI-powered education at home
+            Spark your kid&apos;s creativity with AI-powered education at home
           </p>
         </div>
         <div className="w-full mb-8">
