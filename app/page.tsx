@@ -11,7 +11,7 @@ export default function LandingPage() {
             <h1 className="text-xl font-medium text-gray-900 ml-2">DadMCP</h1>
           </div>
           <Link
-            href="https://github.com/andyrewlee/dadmcp"
+            href="https://github.com/andyrewlee/dad-mcp"
             target="_blank"
             className="text-gray-600 hover:text-gray-900 transition-colors"
           >
