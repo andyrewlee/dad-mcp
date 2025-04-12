@@ -1,5 +1,46 @@
-export default function HomePage() {
+import Link from "next/link"
+import { Button } from "@/components/ui/button"
+
+export default function LandingPage() {
   return (
-    <h1>DadMCP</h1>
+    <main className="flex min-h-screen flex-col items-center bg-white">
+      <header className="w-full py-6 px-4">
+        <div className="max-w-3xl mx-auto flex justify-between items-center">
+          <div className="flex items-center">
+            <h1 className="text-xl font-medium text-gray-900 ml-2">DadMCP</h1>
+          </div>
+          <Link
+            href="https://github.com/andyrewlee/dadmcp"
+            target="_blank"
+            className="text-gray-600 hover:text-gray-900 transition-colors"
+          >
+            <img src="/github.svg" alt="GitHub" className=" h-6 w-6 inline-block" />
+            <span className="sr-only">GitHub</span>
+          </Link>
+        </div>
+      </header>
+      <div className="flex-1 w-full max-w-3xl px-4 py-12 flex flex-col items-center justify-center mb-14">
+        <div className="text-center mb-8">
+          <h2 className="text-4xl font-bold text-gray-900 mb-4">Dad-Powered Learning</h2>
+          <p className="text-lg text-gray-600 max-w-xl mx-auto">
+            Spark your kid's creativity with AI-powered education at home
+          </p>
+        </div>
+        <div className="w-full mb-8">
+          <div className="flex justify-center mb-4">
+            <Button
+              className="bg-black hover:bg-gray-800 text-white px-8 py-6 text-lg rounded-md"
+            >
+              <a href="mailto:andrew@founding.so" className="text-white">Join the Waitlist</a>
+            </Button>
+          </div>
+        </div>
+      </div>
+      <footer className="w-full py-6 border-t border-gray-200">
+        <div className="max-w-3xl mx-auto px-4 text-center">
+          <p className="text-gray-500 text-sm">Open source on <a href="https://github.com/andyrewlee/dad-mcp" target="_blank" className="text-blue-500 hover:text-blue-700">GitHub</a></p>
+        </div>
+      </footer>
+    </main>
   );
 } 
