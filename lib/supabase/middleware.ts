@@ -37,6 +37,11 @@ export async function updateSession(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser()
 
+  // If root page then just load
+  if (request.nextUrl.pathname === '/') {
+    return supabaseResponse
+  }
+
   if (
     !user &&
     !request.nextUrl.pathname.startsWith('/login') &&
