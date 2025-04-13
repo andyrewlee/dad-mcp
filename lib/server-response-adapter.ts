@@ -1,3 +1,5 @@
+// Source: https://github.com/vercel-labs/mcp-for-next.js/blob/main/lib/mcp-api-handler.ts
+
 import { EventEmitter } from "node:events";
 
 import { type ServerResponse } from "node:http";

@@ -1,3 +1,5 @@
+// Source: https://github.com/vercel-labs/mcp-for-next.js/blob/main/lib/mcp-api-handler.ts
+
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { SSEServerTransport } from "@modelcontextprotocol/sdk/server/sse.js";
 import { IncomingHttpHeaders, IncomingMessage, ServerResponse } from "http";

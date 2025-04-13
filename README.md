@@ -40,6 +40,3 @@ pnpm i
 pnpm run dev
 ```
 
-## Contributing
-
-This project is based on the [MCP for Next.js template](https://github.com/vercel-labs/mcp-for-next.js), which is licensed under the terms in [LICENSE-template](LICENSE-template). All changes and additions made after initial commit are licensed under the terms in [LICENSE](LICENSE).
