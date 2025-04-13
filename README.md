@@ -1,20 +1,45 @@
-# Example MCP Server built on Next.js
+# DadMCP
 
-## Usage
+Spark your kid's creativity with AI-powered education at home. Remote MCP server for dad-powered learning.
 
-Update `app/mcp.ts` with your tools, prompts, and resources following the [MCP TypeScript SDK documentation](https://github.com/modelcontextprotocol/typescript-sdk/tree/main?tab=readme-ov-file#server).
+## Connecting to Remote MCP Server
 
-## Notes for running on Vercel
-
-- Requires a Redis attached to the project under `process.env.REDIS_URL`
-- Make sure you have [Fluid compute](https://vercel.com/docs/functions/fluid-compute) enabled for efficient execution
-- After enabling Fluid compute, open `app/sse/route.ts` and adjust max duration to 800 if you using a Vercel Pro or Enterprise account
-- [Deploy the Next.js MCP template](https://vercel.com/templates/next.js/model-context-protocol-mcp-with-next-js)
-
-## Sample Client
-
-`script/test-client.mjs` contains a sample client to try invocations.
-
-```sh
-node scripts/test-client.mjs https://mcp-for-next-js.vercel.app
 ```
+{
+  "mcpServers": {
+    "DadMCP": {
+      "command": "npx",
+      "args": [
+        "mcp-remote",
+        "https://dadmcp.com/sse"
+      ]
+    }
+  }
+}
+```
+
+## Running Locally
+
+Set up local Supabase
+```
+supabase start
+npx supabase gen types typescript --local > lib/database.types.ts
+```
+
+Update .env.local
+```
+NEXT_PUBLIC_SUPABASE_URL=http://127.0.0.1:54321
+NEXT_PUBLIC_SUPABASE_ANON_KEY=YourSupabaseAnonKey
+REDIS_URL=redis://localhost:6379
+```
+
+Run Redis, install dependencies and run Next.js server
+```
+redis-server
+pnpm i
+pnpm run dev
+```
+
+## Contributing
+
+This project is based on the [MCP for Next.js template](https://github.com/vercel-labs/mcp-for-next.js), which is licensed under the terms in [LICENSE-template](LICENSE-template). All changes and additions made after initial commit are licensed under the terms in [LICENSE](LICENSE).
