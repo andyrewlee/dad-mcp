@@ -21,15 +21,6 @@ with
     )
   );
 
-create policy "User can delete their own access token" on "public"."access_tokens" as permissive for delete to authenticated using (
-  (
-    (
-      SELECT
-        auth.uid () AS uid
-    ) = user_id
-  )
-);
-
 create policy "User can read their own access token" on "public"."access_tokens" as permissive for
 select
   to authenticated using (
@@ -41,21 +32,11 @@ select
     )
   );
 
-create policy "User can update their own access token" on "public"."access_tokens" as permissive for
-update to authenticated using (
+create policy "User can delete their own access token" on "public"."access_tokens" as permissive for delete to authenticated using (
   (
     (
       SELECT
         auth.uid () AS uid
     ) = user_id
   )
-)
-with
-  check (
-    (
-      (
-        SELECT
-          auth.uid () AS uid
-      ) = user_id
-    )
-  );
+);
