@@ -1,13 +1,18 @@
-'use client'
+"use client";
 
-import { useState, useTransition } from 'react';
+import { useState, useTransition } from "react";
 
 interface CreateAccessTokenFormProps {
-  createAccessTokenAction: (userId: string) => Promise<{ success: boolean; newToken?: string; error?: string }>;
+  createAccessTokenAction: (
+    userId: string
+  ) => Promise<{ success: boolean; newToken?: string; error?: string }>;
   userId: string;
 }
 
-export default function CreateAccessTokenForm({ createAccessTokenAction, userId }: CreateAccessTokenFormProps) {
+export default function CreateAccessTokenForm({
+  createAccessTokenAction,
+  userId,
+}: CreateAccessTokenFormProps) {
   const [isPending, startTransition] = useTransition();
   const [newToken, setNewToken] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -25,21 +30,22 @@ export default function CreateAccessTokenForm({ createAccessTokenAction, userId 
         setNewToken(result.newToken);
         setShowToken(true); // Show the token immediately after creation
       } else {
-        setError(result.error || 'An unexpected error occurred.');
+        setError(result.error || "An unexpected error occurred.");
       }
     });
   };
 
   const handleCopy = () => {
     if (newToken) {
-      navigator.clipboard.writeText(newToken)
+      navigator.clipboard
+        .writeText(newToken)
         .then(() => {
           // Optional: Show a temporary confirmation message
-          alert('Token copied to clipboard!');
+          alert("Token copied to clipboard!");
         })
-        .catch(err => {
-          console.error('Failed to copy token: ', err);
-          alert('Failed to copy token.');
+        .catch((err) => {
+          console.error("Failed to copy token: ", err);
+          alert("Failed to copy token.");
         });
     }
   };
@@ -47,16 +53,19 @@ export default function CreateAccessTokenForm({ createAccessTokenAction, userId 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       {showToken && newToken && (
-        <div className="p-4 border rounded-lg bg-green-50 border-green-200">
-          <p className="text-sm font-medium text-green-800 mb-2">
-            New token generated. Please copy it now. You won&apos;t be able to see it again.
+        <div className="rounded-lg border border-green-200 bg-green-50 p-4">
+          <p className="mb-2 text-sm font-medium text-green-800">
+            New token generated. Please copy it now. You won&apos;t be able to
+            see it again.
           </p>
-          <div className="flex items-center space-x-2 bg-gray-100 p-2 rounded">
-            <code className="text-sm text-gray-700 break-all flex-grow">{newToken}</code>
+          <div className="flex items-center space-x-2 rounded bg-gray-100 p-2">
+            <code className="flex-grow text-sm break-all text-gray-700">
+              {newToken}
+            </code>
             <button
               type="button"
               onClick={handleCopy}
-              className="px-3 py-1 text-xs font-medium rounded bg-blue-100 text-blue-700 hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 whitespace-nowrap"
+              className="rounded bg-blue-100 px-3 py-1 text-xs font-medium whitespace-nowrap text-blue-700 hover:bg-blue-200 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none"
             >
               Copy
             </button>
@@ -65,7 +74,7 @@ export default function CreateAccessTokenForm({ createAccessTokenAction, userId 
       )}
 
       {error && (
-        <div className="p-3 border rounded-lg bg-red-50 border-red-200">
+        <div className="rounded-lg border border-red-200 bg-red-50 p-3">
           <p className="text-sm font-medium text-red-800">Error: {error}</p>
         </div>
       )}
@@ -74,11 +83,11 @@ export default function CreateAccessTokenForm({ createAccessTokenAction, userId 
         <button
           type="submit"
           disabled={isPending}
-          className="w-full sm:w-auto px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-75 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="focus:ring-opacity-75 w-full rounded-lg bg-blue-600 px-4 py-2 font-semibold text-white shadow-md hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto"
         >
-          {isPending ? 'Generating...' : 'Generate New Token'}
+          {isPending ? "Generating..." : "Generate New Token"}
         </button>
       </div>
     </form>
   );
-} 
+}

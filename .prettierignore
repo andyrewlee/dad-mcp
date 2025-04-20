@@ -1,0 +1,17 @@
+# Next.js build outputs
+.next/
+
+# Node modules
+node_modules/
+
+# Lock files
+pnpm-lock.yaml
+yarn.lock
+package-lock.json
+
+# Other common ignores
+.DS_Store
+*.local
+.env*
+*.log
+coverage/ 
