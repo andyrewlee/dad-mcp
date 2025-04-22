@@ -9,18 +9,20 @@ export const LOOKUP_SUFFIX_LENGTH = LOOKUP_LENGTH / 2;
 export const TOKEN_LENGTH = 32;
 
 /**
- * Validates an access token against the database
- * @param token The token to validate
- * @returns A promise that resolves to true if token is valid, false otherwise
+ * Processes a token by extracting its components
+ * @param token The token with prefix to process
+ * @returns The lookup ID and token value, or false if invalid
  */
-export async function validateToken(token: string | null): Promise<boolean> {
+export function processToken(
+  token: string | null
+): { lookup: string; tokenValue: string } | false {
   // Check if token is provided
   if (!token) {
     console.warn("No token provided");
     return false;
   }
 
-  // Check if token has the expected format (starts with dmp_)
+  // Check if token has the expected format (starts with prefix)
   if (!token.startsWith(TOKEN_PREFIX)) {
     console.error("Token format invalid");
     return false;
@@ -40,6 +42,23 @@ export async function validateToken(token: string | null): Promise<boolean> {
   const firstFour = tokenValue.substring(0, 4);
   const lastFour = tokenValue.substring(tokenValue.length - 4);
   const lookup = firstFour + lastFour;
+
+  return { lookup, tokenValue };
+}
+
+/**
+ * Validates an access token against the database
+ * @param token The token to validate
+ * @returns A promise that resolves to true if token is valid, false otherwise
+ */
+export async function validateToken(token: string | null): Promise<boolean> {
+  // Process the token
+  const processed = processToken(token);
+  if (!processed) {
+    return false;
+  }
+
+  const { lookup, tokenValue } = processed;
 
   // The secret is everything in between
   const secretPart = tokenValue.substring(4, tokenValue.length - 4);

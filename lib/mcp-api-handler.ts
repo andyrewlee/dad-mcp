@@ -17,7 +17,9 @@ import { createClient } from "redis";
 import { Socket } from "net";
 import { Readable } from "stream";
 import { ServerOptions } from "@modelcontextprotocol/sdk/server/index.js";
+
 import { maxDuration } from "@/app/sse/route";
+import { processToken } from "@/lib/validate-token";
 
 interface SerializedRequest {
   requestId: string;
@@ -59,10 +61,21 @@ export function initializeMcpApiHandler(
 
       const transport = new SSEServerTransport("/message", res);
       const sessionId = transport.sessionId;
+      const token = url.searchParams.get("token") || "";
+
+      const processed = processToken(token);
+      if (!processed) {
+        res.statusCode = 401;
+        res.end("Invalid token");
+        return;
+      }
+
+      redisPublisher.set(sessionId, processed.lookup);
+
       const server = new McpServer(
         {
-          name: "mcp-typescript server on vercel",
-          version: "0.1.0",
+          name: "DadMCP",
+          version: "0.0.1",
         },
         serverOptions
       );
@@ -92,6 +105,19 @@ export function initializeMcpApiHandler(
       const handleMessage = async (message: string) => {
         console.log("Received message from Redis", message);
         logInContext("log", "Received message from Redis", message);
+
+        // Check if this session ID still exists in Redis
+        const sessionExists = await redisPublisher.get(sessionId);
+        if (!sessionExists) {
+          console.log(`Session ${sessionId} no longer exists, cleaning up`);
+          logInContext(
+            "log",
+            `Session ${sessionId} no longer exists, cleaning up`
+          );
+          await cleanup();
+          return;
+        }
+
         const request = JSON.parse(message) as SerializedRequest;
 
         // Make in IncomingMessage object because that is what the SDK expects.
@@ -161,6 +187,7 @@ export function initializeMcpApiHandler(
         clearTimeout(timeout);
         clearInterval(interval);
         await redis.unsubscribe(`requests:${sessionId}`, handleMessage);
+        await redisPublisher.del(sessionId);
         console.log("Done");
         res.statusCode = 200;
         res.end();
