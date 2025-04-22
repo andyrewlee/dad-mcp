@@ -38,18 +38,21 @@ export type Database = {
         Row: {
           created_at: string;
           id: string;
+          lookup: string | null;
           token: string | null;
           user_id: string | null;
         };
         Insert: {
           created_at?: string;
           id?: string;
+          lookup?: string | null;
           token?: string | null;
           user_id?: string | null;
         };
         Update: {
           created_at?: string;
           id?: string;
+          lookup?: string | null;
           token?: string | null;
           user_id?: string | null;
         };

@@ -2,11 +2,14 @@ create table
   "public"."access_tokens" (
     "id" uuid not null default gen_random_uuid (),
     "user_id" uuid,
+    "lookup" text unique,
     "token" text,
     "created_at" timestamp
     with
       time zone not null default now ()
   );
+
+create index "idx_access_tokens_prefix" ON "public"."access_tokens" ("lookup");
 
 alter table "public"."access_tokens" enable row level security;
 
