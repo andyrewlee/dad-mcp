@@ -2,8 +2,28 @@
 
 import { useTransition } from "react";
 import type { Database } from "@/lib/database.types";
+import { Button } from "@/components/ui/button";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 type AccessToken = Database["public"]["Tables"]["access_tokens"]["Row"];
+
+// Helper function to format the token display
+const formatTokenDisplay = (lookup: string | null | undefined): string => {
+  if (!lookup || lookup.length < 8) {
+    // Handle cases where lookup is null, undefined, or too short
+    return "dmp_****...****";
+  }
+  const start = lookup.substring(0, 4);
+  const end = lookup.substring(lookup.length - 4);
+  return `dmp_${start}********************************${end}`;
+};
 
 interface AccessTokenListProps {
   tokens: AccessToken[];
@@ -33,33 +53,45 @@ export default function AccessTokenList({
     }
   };
 
+  if (tokens.length === 0) {
+    return (
+      <p className="text-sm text-gray-500">
+        You haven&apos;t created any access tokens yet.
+      </p>
+    );
+  }
+
   return (
-    <ul className="space-y-3">
-      {tokens.map((token) => (
-        <li
-          key={token.id}
-          className="flex flex-col items-start justify-between rounded-lg border bg-gray-50 p-3 sm:flex-row sm:items-center"
-        >
-          <div className="mb-2 sm:mb-0">
-            <p className="text-sm font-medium text-gray-800">
-              Token ID:{" "}
-              <code className="rounded bg-gray-200 px-1 text-xs">
-                {token.id}
+    <Table>
+      <TableHeader>
+        <TableRow>
+          <TableHead>Token</TableHead>
+          <TableHead>Created</TableHead>
+          <TableHead className="text-right">Actions</TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        {tokens.map((token) => (
+          <TableRow key={token.id}>
+            <TableCell className="font-medium">
+              <code className="rounded bg-gray-100 px-1.5 py-0.5 text-xs">
+                {formatTokenDisplay(token.lookup)}
               </code>
-            </p>
-            <p className="text-xs text-gray-500">
-              Created: {new Date(token.created_at).toLocaleString()}
-            </p>
-          </div>
-          <button
-            onClick={() => handleDelete(token.id)}
-            disabled={isPending}
-            className="rounded bg-red-100 px-3 py-1 text-xs font-medium whitespace-nowrap text-red-700 hover:bg-red-200 focus:ring-2 focus:ring-red-500 focus:ring-offset-1 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
-          >
-            {isPending ? "Deleting..." : "Delete"}
-          </button>
-        </li>
-      ))}
-    </ul>
+            </TableCell>
+            <TableCell>{new Date(token.created_at).toLocaleString()}</TableCell>
+            <TableCell className="text-right">
+              <Button
+                variant="destructive"
+                size="sm"
+                onClick={() => handleDelete(token.id)}
+                disabled={isPending}
+              >
+                {isPending ? "Deleting..." : "Delete"}
+              </Button>
+            </TableCell>
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
   );
 }
