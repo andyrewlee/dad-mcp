@@ -20,6 +20,7 @@ import { ServerOptions } from "@modelcontextprotocol/sdk/server/index.js";
 
 import { maxDuration } from "@/app/sse/route";
 import { processToken } from "@/lib/validate-token";
+import { createAdminClient } from "@/lib/supabase/admin";
 
 interface SerializedRequest {
   requestId: string;
@@ -29,8 +30,10 @@ interface SerializedRequest {
   headers: IncomingHttpHeaders;
 }
 
+const supabase = createAdminClient();
+
 export function initializeMcpApiHandler(
-  initializeServer: (server: McpServer) => void,
+  initializeServer: (server: McpServer, userId: string) => void,
   serverOptions: ServerOptions = {}
 ) {
   const redisUrl = process.env.REDIS_URL || process.env.KV_URL;
@@ -79,7 +82,19 @@ export function initializeMcpApiHandler(
         },
         serverOptions
       );
-      initializeServer(server);
+
+      const { data, error } = await supabase
+        .from("access_tokens")
+        .select("user_id")
+        .eq("lookup", processed.lookup)
+        .single();
+      if (error || !data) {
+        console.error("Error fetching user ID", error);
+        res.statusCode = 500;
+        res.end("Internal server error");
+        return;
+      }
+      initializeServer(server, data.user_id);
 
       servers.push(server);
 
