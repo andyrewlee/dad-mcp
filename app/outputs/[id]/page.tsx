@@ -41,7 +41,7 @@ export default async function OutputDetailPage({ params }: OutputPageProps) {
   const { data: output, error: outputError } = await supabase
     .from("outputs")
     .select("*")
-    .eq("id", params.id)
+    .eq("id", await params.id)
     .single();
 
   // Check if output not found or error

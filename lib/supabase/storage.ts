@@ -8,7 +8,7 @@ export async function resolveStorageUrl(
 
   try {
     const { data, error } = await supabase.storage
-      .from("private")
+      .from("private-outputs")
       .createSignedUrl(path, 600);
     return error ? null : data?.signedUrl || null;
   } catch {

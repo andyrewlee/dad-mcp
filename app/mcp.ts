@@ -27,7 +27,7 @@ async function uploadImageToSupabase(
 
     // Upload to Supabase
     const { data, error } = await supabase.storage
-      .from("private")
+      .from("private-outputs")
       .upload(fileName, imageBlob, {
         contentType: "image/png",
         upsert: false,
@@ -40,7 +40,7 @@ async function uploadImageToSupabase(
     // Get public URL
     const {
       data: { publicUrl },
-    } = supabase.storage.from("private").getPublicUrl(fileName);
+    } = supabase.storage.from("private-outputs").getPublicUrl(fileName);
 
     return publicUrl;
   } catch (error) {
