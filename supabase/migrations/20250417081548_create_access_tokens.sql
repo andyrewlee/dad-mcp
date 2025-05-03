@@ -1,45 +1,12 @@
-create table
-  "public"."access_tokens" (
-    "id" uuid not null default gen_random_uuid (),
-    "user_id" uuid,
-    "lookup" text unique,
-    "token" text,
-    "created_at" timestamp
-    with
-      time zone not null default now ()
-  );
-
-create index "idx_access_tokens_prefix" ON "public"."access_tokens" ("lookup");
-
-alter table "public"."access_tokens" enable row level security;
-
-create policy "User can create their own access token" on "public"."access_tokens" as permissive for insert to authenticated
-with
-  check (
-    (
-      (
-        SELECT
-          auth.uid () AS uid
-      ) = user_id
-    )
-  );
-
-create policy "User can read their own access token" on "public"."access_tokens" as permissive for
-select
-  to authenticated using (
-    (
-      (
-        SELECT
-          auth.uid () AS uid
-      ) = user_id
-    )
-  );
-
-create policy "User can delete their own access token" on "public"."access_tokens" as permissive for delete to authenticated using (
-  (
-    (
-      SELECT
-        auth.uid () AS uid
-    ) = user_id
-  )
+CREATE TABLE "public"."access_tokens"(
+  "id" uuid NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
+  "user_id" uuid NOT NULL,
+  "lookup" text UNIQUE NOT NULL,
+  "token" text NOT NULL,
+  "created_at" timestamp with time zone NOT NULL DEFAULT now()
 );
+
+ALTER TABLE "public"."access_tokens"
+  ADD CONSTRAINT "access_tokens_user_id_fkey" FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE CASCADE NOT valid;
+
+CREATE INDEX "idx_access_tokens_lookup" ON "public"."access_tokens"("lookup");

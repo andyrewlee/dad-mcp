@@ -38,23 +38,50 @@ export type Database = {
         Row: {
           created_at: string;
           id: string;
-          lookup: string | null;
-          token: string | null;
-          user_id: string | null;
+          lookup: string;
+          token: string;
+          user_id: string;
         };
         Insert: {
           created_at?: string;
           id?: string;
-          lookup?: string | null;
-          token?: string | null;
-          user_id?: string | null;
+          lookup: string;
+          token: string;
+          user_id: string;
         };
         Update: {
           created_at?: string;
           id?: string;
-          lookup?: string | null;
-          token?: string | null;
-          user_id?: string | null;
+          lookup?: string;
+          token?: string;
+          user_id?: string;
+        };
+        Relationships: [];
+      };
+      outputs: {
+        Row: {
+          created_at: string;
+          data: Json;
+          id: string;
+          is_public: boolean;
+          source: string;
+          user_id: string;
+        };
+        Insert: {
+          created_at?: string;
+          data: Json;
+          id?: string;
+          is_public?: boolean;
+          source: string;
+          user_id: string;
+        };
+        Update: {
+          created_at?: string;
+          data?: Json;
+          id?: string;
+          is_public?: boolean;
+          source?: string;
+          user_id?: string;
         };
         Relationships: [];
       };
