@@ -4,15 +4,18 @@ import Link from "next/link";
 import { resolveStorageUrl } from "@/lib/supabase/storage";
 
 interface OutputPageProps {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
 export default async function OutputDetailPage({ params }: OutputPageProps) {
   // Use regular client for auth check and storage
   const supabase = await createClient();
   const { data: userData, error: userError } = await supabase.auth.getUser();
+
+  // Await params before accessing properties
+  const { id } = await params;
 
   // Redirect to login if there's an auth error
   if (userError) {
@@ -41,7 +44,7 @@ export default async function OutputDetailPage({ params }: OutputPageProps) {
   const { data: output, error: outputError } = await supabase
     .from("outputs")
     .select("*")
-    .eq("id", await params.id)
+    .eq("id", id)
     .single();
 
   // Check if output not found or error
