@@ -1,5 +1,7 @@
 import { SupabaseClient } from "@supabase/supabase-js";
 
+import { createAdminClient } from "./admin";
+
 export async function resolveStorageUrl(
   supabase: SupabaseClient,
   imageUrl: string
@@ -13,5 +15,49 @@ export async function resolveStorageUrl(
     return error ? null : data?.signedUrl || null;
   } catch {
     return null;
+  }
+}
+
+export async function uploadImageToSupabase(
+  imageUrl: string,
+  userId: string,
+  outputId: string
+) {
+  try {
+    // Download the image
+    const response = await fetch(imageUrl);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch image: ${response.statusText}`);
+    }
+
+    const imageBlob = await response.blob();
+
+    // Create file name using the output ID
+    const fileName = `${userId}/${outputId}.png`;
+
+    // Get supabase client
+    const supabase = createAdminClient();
+
+    // Upload to Supabase
+    const { error } = await supabase.storage
+      .from("private-outputs")
+      .upload(fileName, imageBlob, {
+        contentType: "image/png",
+        upsert: false,
+      });
+
+    if (error) {
+      throw new Error(`Error uploading image to Supabase: ${error.message}`);
+    }
+
+    // Get public URL
+    const {
+      data: { publicUrl },
+    } = supabase.storage.from("private-outputs").getPublicUrl(fileName);
+
+    return publicUrl;
+  } catch (error) {
+    console.error("Error uploading image:", error);
+    throw error;
   }
 }

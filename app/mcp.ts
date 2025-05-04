@@ -3,51 +3,7 @@ import Replicate from "replicate";
 
 import { initializeMcpApiHandler } from "@/lib/mcp-api-handler";
 import { createAdminClient } from "@/lib/supabase/admin";
-
-// Helper function to download and upload image
-async function uploadImageToSupabase(
-  imageUrl: string,
-  userId: string,
-  outputId: string
-) {
-  try {
-    // Download the image
-    const response = await fetch(imageUrl);
-    if (!response.ok) {
-      throw new Error(`Failed to fetch image: ${response.statusText}`);
-    }
-
-    const imageBlob = await response.blob();
-
-    // Create file name using the output ID
-    const fileName = `${userId}/${outputId}.png`;
-
-    // Get supabase client
-    const supabase = createAdminClient();
-
-    // Upload to Supabase
-    const { data, error } = await supabase.storage
-      .from("private-outputs")
-      .upload(fileName, imageBlob, {
-        contentType: "image/png",
-        upsert: false,
-      });
-
-    if (error) {
-      throw new Error(`Error uploading image to Supabase: ${error.message}`);
-    }
-
-    // Get public URL
-    const {
-      data: { publicUrl },
-    } = supabase.storage.from("private-outputs").getPublicUrl(fileName);
-
-    return publicUrl;
-  } catch (error) {
-    console.error("Error uploading image:", error);
-    throw error;
-  }
-}
+import { uploadImageToSupabase } from "@/lib/supabase/storage";
 
 const supabase = createAdminClient();
 
