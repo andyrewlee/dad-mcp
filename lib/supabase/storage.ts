@@ -10,7 +10,7 @@ export async function resolveStorageUrl(
 
   try {
     const { data, error } = await supabase.storage
-      .from("private-outputs")
+      .from("private-assets")
       .createSignedUrl(path, 600);
     return error ? null : data?.signedUrl || null;
   } catch {
@@ -40,7 +40,7 @@ export async function uploadImageToSupabase(
 
     // Upload to Supabase
     const { error } = await supabase.storage
-      .from("private-outputs")
+      .from("private-assets")
       .upload(fileName, imageBlob, {
         contentType: "image/png",
         upsert: false,
@@ -53,7 +53,7 @@ export async function uploadImageToSupabase(
     // Get public URL
     const {
       data: { publicUrl },
-    } = supabase.storage.from("private-outputs").getPublicUrl(fileName);
+    } = supabase.storage.from("private-assets").getPublicUrl(fileName);
 
     return publicUrl;
   } catch (error) {
