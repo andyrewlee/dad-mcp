@@ -12,7 +12,12 @@ import {
   NavigationMenuLink,
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
-import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet";
+import {
+  Sheet,
+  SheetTrigger,
+  SheetContent,
+  SheetTitle,
+} from "@/components/ui/sheet";
 import { Menu as MenuIcon } from "lucide-react";
 
 type NavbarProps = {
@@ -28,27 +33,28 @@ export default function Navbar({ user }: NavbarProps) {
   return (
     <header className="w-full border-b bg-white">
       <div className="mx-auto flex h-16 items-center justify-between px-4">
-        {/* Logo */}
         <Link href="/" className="flex items-center gap-2">
           <h1 className="text-xl font-bold text-gray-900">DadMCP</h1>
         </Link>
 
-        {/* Desktop Nav */}
-        <NavigationMenu className="hidden flex-1 justify-center md:flex">
-          <NavigationMenuList>
-            {navLinks.map((link) => (
-              <NavigationMenuItem key={link.href}>
-                <Link href={link.href} legacyBehavior passHref>
-                  <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                    {link.label}
-                  </NavigationMenuLink>
-                </Link>
-              </NavigationMenuItem>
-            ))}
-          </NavigationMenuList>
-        </NavigationMenu>
+        {user && (
+          <NavigationMenu className="hidden flex-1 justify-center md:flex">
+            <NavigationMenuList>
+              {navLinks.map((link) => (
+                <NavigationMenuItem key={link.href}>
+                  <Link href={link.href} legacyBehavior passHref>
+                    <NavigationMenuLink
+                      className={navigationMenuTriggerStyle()}
+                    >
+                      {link.label}
+                    </NavigationMenuLink>
+                  </Link>
+                </NavigationMenuItem>
+              ))}
+            </NavigationMenuList>
+          </NavigationMenu>
+        )}
 
-        {/* Right side (GitHub, Auth) */}
         <div className="hidden items-center gap-4 md:flex">
           <Link
             href="https://github.com/andyrewlee/dad-mcp"
@@ -88,18 +94,21 @@ export default function Navbar({ user }: NavbarProps) {
                   <Link href="/" className="flex items-center gap-2">
                     <h1 className="text-lg font-bold text-gray-900">DadMCP</h1>
                   </Link>
+                  <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
                 </div>
-                <nav className="flex flex-col gap-1 px-4 py-4">
-                  {navLinks.map((link) => (
-                    <Link
-                      key={link.href}
-                      href={link.href}
-                      className="rounded px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-100"
-                    >
-                      {link.label}
-                    </Link>
-                  ))}
-                </nav>
+                {user && (
+                  <nav className="flex flex-col gap-1 px-4 py-4">
+                    {navLinks.map((link) => (
+                      <Link
+                        key={link.href}
+                        href={link.href}
+                        className="rounded px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-100"
+                      >
+                        {link.label}
+                      </Link>
+                    ))}
+                  </nav>
+                )}
                 <div className="mt-auto flex flex-col gap-2 border-t px-4 py-4">
                   <Link
                     href="https://github.com/andyrewlee/dad-mcp"
