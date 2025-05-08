@@ -24,7 +24,7 @@ export default async function OutputsPage() {
         </div>
         <Link
           href="/auth/login"
-          className="inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:outline-none"
+          className="inline-flex items-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none"
         >
           Go to Login
         </Link>
@@ -67,12 +67,6 @@ export default async function OutputsPage() {
       <div className="container mx-auto px-4 py-8">
         <div className="mb-6 flex items-center justify-between">
           <h1 className="text-2xl font-bold">Your Outputs</h1>
-        </div>
-
-        <div className="mb-6">
-          <p className="text-sm text-gray-600">
-            Logged in as: {userData.user.email}
-          </p>
         </div>
 
         {outputsError && (
@@ -139,7 +133,7 @@ export default async function OutputsPage() {
 
                       <Link
                         href={`/outputs/${output.id}`}
-                        className="text-sm font-medium text-indigo-600 hover:text-indigo-900"
+                        className="text-sm font-medium text-blue-600 hover:text-blue-900"
                       >
                         View Details
                       </Link>
