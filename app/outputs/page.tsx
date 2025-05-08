@@ -42,17 +42,10 @@ export default async function OutputsPage() {
   // Process all outputs to find the first image preview using the new helper
   const processedOutputs = await Promise.all(
     (outputs || []).map(async (output) => {
-      // Extract the specific path/URL string from the output data
-      const imagePathOrUrl =
-        typeof output.data === "object" &&
-        output.data !== null &&
-        typeof (output.data as any).image === "string"
-          ? (output.data as any).image
-          : null;
-
-      const previewImageUrl = imagePathOrUrl
-        ? await resolveStorageUrl(supabase, output.data.image)
-        : null; // If no path found in the expected field
+      const previewImageUrl = await resolveStorageUrl(
+        supabase,
+        output.data.image
+      );
 
       return {
         ...output,

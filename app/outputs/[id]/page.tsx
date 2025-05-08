@@ -70,21 +70,7 @@ export default async function OutputDetailPage({ params }: OutputPageProps) {
     );
   }
 
-  // Debug info
-  // console.log("Output data:", JSON.stringify(output.data, null, 2)); // Keep commented for potential debugging
-
-  // Get the first preview image URL using the shared helper
-  // Extract the specific path/URL string from the output data
-  const imagePathOrUrl =
-    typeof output.data === "object" &&
-    output.data !== null &&
-    typeof (output.data as any).image === "string"
-      ? (output.data as any).image
-      : null;
-
-  const previewImageUrl = imagePathOrUrl
-    ? await resolveStorageUrl(supabase, output.data.image)
-    : null; // If no path found in the expected field
+  const previewImageUrl = await resolveStorageUrl(supabase, output.data.image);
 
   return (
     <>

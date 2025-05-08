@@ -27,7 +27,7 @@ const navLinks = [
 export default function Navbar({ user }: NavbarProps) {
   return (
     <header className="w-full border-b bg-white">
-      <div className="mx-auto flex h-16 max-w-5xl items-center justify-between px-4">
+      <div className="mx-auto flex h-16 items-center justify-between px-4">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2">
           <h1 className="text-xl font-bold text-gray-900">DadMCP</h1>
